@@ -3,781 +3,686 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>幻獸帕魯帕魯圖鑑 - 搜尋</title>
+  <title>點選帕魯 - 空渦龍</title>
 
   <style>
     :root{
-      --bg:#ffffff;
-      --text:#202124;
-      --muted:#5f6368;
-      --border:#e0e0e0;
-      --blue:#1a0dab;
-      --blue2:#1a73e8;
-      --chip:#f1f3f4;
-      --shadow: 0 1px 2px rgba(60,64,67,.15), 0 1px 3px 1px rgba(60,64,67,.1);
-      --radius: 12px;
-      --max: 1100px;
-      --tab:#3c4043;
-      --tabMuted:#70757a;
-      --tabLine:#dadce0;
+      --bg1:#0b1020;
+      --bg2:#101a33;
+      --glow1:rgba(58,130,255,.35);
+      --glow2:rgba(170,80,255,.30);
+      --panel:rgba(20,26,44,.76);
+      --panel2:rgba(23,29,49,.88);
+      --stroke:rgba(255,255,255,.14);
+      --stroke2:rgba(255,255,255,.10);
+      --txt:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.70);
+      --muted2:rgba(255,255,255,.55);
+      --chip:rgba(255,255,255,.10);
+      --chip2:rgba(255,255,255,.14);
+      --accent:#7fb2ff;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --r: 18px;
+      --r2: 14px;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: Arial, "Noto Sans TC", system-ui, -apple-system, "Segoe UI";
-      background: var(--bg);
-      color: var(--text);
+      font-family: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Arial;
+      color:var(--txt);
+      background:
+        radial-gradient(900px 600px at 18% 12%, var(--glow1), transparent 55%),
+        radial-gradient(900px 650px at 88% 20%, var(--glow2), transparent 60%),
+        linear-gradient(180deg, var(--bg2), var(--bg1) 70%, #070a12);
+      overflow-x:hidden;
     }
-    a{color:var(--blue2); text-decoration:none}
-    a:hover{text-decoration:underline}
 
-    /* ===== top ===== */
-    .topbar{
-      position: sticky;
-      top:0;
-      z-index: 50;
-      background:#fff;
-      border-bottom: 1px solid var(--tabLine);
+    /* subtle animated background */
+    .bg-noise{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.08;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
     }
-    .topwrap{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 14px 14px 6px;
+
+    .stage{
+      min-height:100vh;
+      padding: 48px 18px 70px;
       display:flex;
-      align-items:center;
-      gap: 14px;
+      justify-content:center;
+      align-items:flex-start;
     }
-    .glogo{
+
+    .wrap{
+      width:min(1120px, 100%);
+    }
+
+    .topRow{
       display:flex;
-      align-items:center;
-      gap:8px;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom: 14px;
+    }
+
+    .titleBox{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .h1{
+      margin:0;
+      font-size: 40px;
+      letter-spacing: .5px;
+      text-shadow: 0 10px 25px rgba(0,0,0,.35);
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .btnGhost{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--txt);
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      box-shadow: 0 12px 26px rgba(0,0,0,.25);
+      transition:.15s transform, .15s background;
       user-select:none;
       white-space:nowrap;
     }
-    .glogo .g{
-      font-weight:800;
-      font-size: 22px;
-      letter-spacing:.2px;
-    }
-    .glogo .g span:nth-child(1){color:#4285f4}
-    .glogo .g span:nth-child(2){color:#ea4335}
-    .glogo .g span:nth-child(3){color:#fbbc05}
-    .glogo .g span:nth-child(4){color:#4285f4}
-    .glogo .g span:nth-child(5){color:#34a853}
-    .glogo .g span:nth-child(6){color:#ea4335}
-    .glogo .sub{color:#9aa0a6; font-size:12px}
-    .search{
-      flex:1;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 10px 14px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.06);
-      min-width: 220px;
-    }
-    .search input{
-      border:0;
-      outline:none;
-      width:100%;
-      font-size: 16px;
-      color: var(--text);
-    }
-    .iconBtn{
-      border:0;
-      background:transparent;
-      cursor:pointer;
-      color:#5f6368;
-      font-size:14px;
-      padding:6px 8px;
-      border-radius:999px;
-    }
-    .iconBtn:hover{background:#f1f3f4}
-
-    .tabs{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 14px;
-      display:flex;
-      gap: 18px;
-      align-items:flex-end;
-      border-bottom: 1px solid var(--tabLine);
-    }
-    .tab{
-      padding: 10px 2px 12px;
-      font-size: 13px;
-      color: var(--tabMuted);
-      cursor:pointer;
-      user-select:none;
-      border-bottom: 3px solid transparent;
-    }
-    .tab.active{
-      color: var(--tab);
-      border-bottom-color: var(--blue2);
-      font-weight: 700;
+    .btnGhost:hover{
+      background: rgba(255,255,255,.09);
+      transform: translateY(-1px);
     }
 
-    /* ===== content ===== */
-    .content{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 12px 14px 60px;
-    }
-    .metaLine{
-      color: var(--muted);
-      font-size: 13px;
-      margin: 10px 0 12px;
-    }
-    .layout{
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap: 22px;
-      align-items:start;
-    }
-    @media (max-width: 980px){
-      .layout{grid-template-columns: 1fr}
-    }
-
-    /* ===== results list ===== */
-    .results{max-width: 680px;}
-    .resultRow{
-      display:flex;
-      gap:14px;
-      justify-content:space-between;
-      padding: 8px 0 14px;
-    }
-    .resultRow + .resultRow{ margin-top: 8px; }
-    .resultText{flex:1; min-width: 0;}
-    .breadcrumb{
-      color: #202124;
-      font-size: 12px;
-      margin-bottom: 4px;
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      flex-wrap:wrap;
-    }
-    .crumbHost{color:#202124}
-    .crumbPath{color:#5f6368}
-    .titleLink{
-      display:inline-block;
-      font-size: 20px;
-      color: var(--blue);
-      line-height: 1.3;
-      margin-bottom: 5px;
-      cursor:pointer;
-    }
-    .snippet{
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    .sitelinks{
-      margin-top: 8px;
-      display:flex;
-      flex-wrap:wrap;
-      gap: 14px;
-      font-size: 13px;
-    }
-    .sitelinks a{color: var(--blue2)}
-    .resultImg{
-      width: 92px;
-      height: 92px;
-      border-radius: 10px;
+    /* main panel */
+    .panel{
+      background: var(--panel);
+      border: 1px solid var(--stroke);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      position:relative;
       overflow:hidden;
-      border: 1px solid var(--border);
-      background: #f1f3f4;
-      flex: 0 0 auto;
-      align-self:flex-start;
     }
-    .resultImg img{
+    .panel:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: linear-gradient(135deg, rgba(255,255,255,.12), transparent 30%, transparent 70%, rgba(255,255,255,.10));
+      opacity:.25;
+      pointer-events:none;
+    }
+
+    /* filter bar */
+    .filters{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom: 14px;
+      position:relative;
+      z-index:1;
+    }
+
+    .input, .select{
+      height: 38px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke2);
+      background: rgba(0,0,0,.22);
+      color: var(--txt);
+      padding: 0 12px;
+      outline:none;
+      font-size: 13px;
+      min-width: 200px;
+    }
+    .select{min-width: 160px}
+    .input::placeholder{color: rgba(255,255,255,.45)}
+
+    .btnMini{
+      height: 38px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke2);
+      background: rgba(255,255,255,.08);
+      color: var(--txt);
+      padding: 0 12px;
+      cursor:pointer;
+      transition:.15s transform, .15s background;
+      user-select:none;
+      white-space:nowrap;
+      font-size: 13px;
+    }
+    .btnMini:hover{
+      background: rgba(255,255,255,.11);
+      transform: translateY(-1px);
+    }
+    .btnMini.primary{
+      border-color: rgba(127,178,255,.45);
+      box-shadow: 0 10px 24px rgba(127,178,255,.12);
+    }
+
+    /* single card area */
+    .cards{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      position:relative;
+      z-index:1;
+    }
+
+    .card{
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke2);
+      border-radius: var(--r);
+      padding: 14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      cursor:pointer;
+      transition:.18s transform, .18s background, .18s border;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.16);
+    }
+
+    .media{
+      border-radius: var(--r2);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+      aspect-ratio: 16/7;
+      min-height: 220px;
+    }
+    .media img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
+      transform: scale(1.02);
     }
 
-    /* ===== knowledge panel ===== */
-    .kp{
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px;
-    }
-    .kpTop{
+    .meta{
       display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
+      flex-direction:column;
+      gap:6px;
+      padding: 0 4px;
     }
-    .kpTitle{
-      font-size: 20px;
-      font-weight: 700;
+    .name{
+      font-size: 18px;
+      font-weight: 800;
       margin:0;
     }
-    .kpType{
+    .line{
       font-size: 13px;
       color: var(--muted);
-      margin-top: 2px;
+      margin:0;
     }
-    .kpImg{
-      width:100%;
-      aspect-ratio: 16/9;
-      border-radius: 10px;
-      overflow:hidden;
-      border: 1px solid var(--border);
-      background:#f1f3f4;
-      margin: 10px 0;
-      cursor:pointer;
-    }
-    .kpImg img{width:100%; height:100%; object-fit:cover; display:block}
-    .kpLine{
-      font-size: 13px;
-      color: #3c4043;
-      line-height: 1.7;
-    }
-    .kpLine b{color:#202124}
-    .divider{height:1px;background:var(--border); margin: 10px 0}
-    .kpLinks{display:flex; flex-direction:column; gap:8px; margin-top:10px;}
-    .kpLinks a{font-size: 14px}
-
-    /* ===== detail page ===== */
-    #detailView{display:none}
-    .detailHeader{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 12px 14px;
+    .chips{
       display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap: 10px;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top: 6px;
     }
-    .backLink{
-      color: var(--blue2);
-      font-size: 14px;
-      cursor:pointer;
+    .chip{
+      background: var(--chip);
+      border: 1px solid rgba(255,255,255,.10);
+      color: rgba(255,255,255,.82);
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
       user-select:none;
-      white-space:nowrap;
     }
-    .backLink:hover{text-decoration:underline}
-    .detailMain{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 14px 60px;
+
+    /* ===== detail view ===== */
+    #detailView{display:none}
+    .detailGrid{
       display:grid;
-      grid-template-columns: 1fr 360px;
-      gap: 22px;
+      grid-template-columns: 440px 1fr;
+      gap: 14px;
+      align-items:stretch;
     }
     @media (max-width: 980px){
-      .detailMain{grid-template-columns:1fr}
+      .detailGrid{grid-template-columns:1fr}
     }
-    .article{
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      background:#fff;
-      padding: 16px;
-    }
-    .h1{margin: 0 0 8px; font-size: 30px; line-height:1.2;}
-    .byline{color: var(--muted); font-size: 13px; margin-bottom: 12px;}
-    .hero{
-      width:100%;
-      aspect-ratio: 16/9;
-      border-radius: 12px;
-      overflow:hidden;
-      border: 1px solid var(--border);
-      background:#f1f3f4;
-      margin: 10px 0 14px;
-      cursor:pointer;
-    }
-    .hero img{width:100%; height:100%; object-fit:cover; display:block}
-    .section{margin-top: 16px}
-    .section h2{font-size: 18px; margin: 0 0 8px;}
-    .section p, .section li{font-size: 14px; line-height: 1.85; color:#3c4043;}
-    .section ul{margin: 8px 0 0; padding-left: 18px;}
 
-    .toc{
-      border:1px solid var(--border);
-      border-radius: var(--radius);
+    .detailLeft, .detailRight{
+      background: var(--panel2);
+      border: 1px solid var(--stroke);
+      border-radius: var(--r);
       box-shadow: var(--shadow);
-      background:#fff;
-      padding: 12px;
-      position: sticky;
-      top: 92px;
-    }
-    @media (max-width: 980px){ .toc{position:static} }
-    .toc h3{margin:0 0 10px; font-size: 14px}
-    .toc a{display:block; padding: 6px 0; font-size: 13px; color: var(--blue2)}
-    .toc a:hover{text-decoration:underline}
-
-    .mapCard{
-      border:1px solid var(--border);
-      border-radius: var(--radius);
       overflow:hidden;
-      box-shadow: var(--shadow);
-      background:#fff;
-      margin-top: 12px;
+      position:relative;
     }
-    .mapHead{
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap: 10px;
-      flex-wrap:wrap;
-    }
-    .mapHead b{font-size: 14px}
-    .mapHead a{font-size: 13px}
-    .mapFrame{
+
+    .detailLeft .img{
       width:100%;
-      height: 520px;
-      border:0;
+      aspect-ratio: 16/10;
+      background: rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+    .detailLeft .img img{
+      width:100%; height:100%;
+      object-fit:cover;
       display:block;
-      background:#f1f3f4;
     }
-    .note{
-      padding: 10px 12px;
+
+    .detailLeft .info{
+      padding: 14px 16px 16px;
+    }
+    .detailLeft .info h2{
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+    .detailLeft .info p{
+      margin: 0;
       color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .detailRight{
+      padding: 14px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .secTitle{
+      font-size: 14px;
+      color: rgba(255,255,255,.88);
+      margin:0;
+      font-weight: 800;
+      letter-spacing:.3px;
+    }
+
+    .bullets{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 4px;
+    }
+
+    /* Google CSE panel */
+    .cseWrap{
+      display:none;
+      margin-top: 10px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid var(--stroke2);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    /* Make CSE blend a bit */
+    .cseWrap *{
+      font-family: inherit !important;
+    }
+    .cseWrap .gsc-control-cse{
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+    .cseWrap .gsc-search-box{
+      margin: 0 0 10px !important;
+    }
+    .cseWrap input.gsc-input{
+      background: rgba(0,0,0,.20) !important;
+      color: #fff !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      border-radius: 12px !important;
+      padding: 10px 12px !important;
+      box-shadow: none !important;
+    }
+    .cseWrap .gsc-search-button-v2{
+      border-radius: 12px !important;
+      padding: 10px 14px !important;
+    }
+
+    /* tiny note */
+    .note{
+      color: var(--muted2);
       font-size: 12px;
-      border-top: 1px solid var(--border);
+      margin-top: 8px;
       line-height: 1.6;
     }
 
-    /* ===== lightbox ===== */
-    #lightbox{
-      position: fixed;
-      inset:0;
-      background: rgba(0,0,0,.72);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 9999;
-    }
-    .lb{
-      width: min(1100px, 100%);
-      background:#111;
-      border-radius: 14px;
-      overflow:hidden;
-      box-shadow: 0 20px 80px rgba(0,0,0,.5);
-    }
-    .lb img{
-      width:100%;
-      max-height: 82vh;
-      object-fit: contain;
-      display:block;
-      background:#111;
-    }
-    .lbBar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 10px 12px;
-      color: rgba(255,255,255,.85);
-      font-size: 12px;
-      background:#0f0f0f;
-    }
-    .x{
-      cursor:pointer;
-      padding: 6px 10px;
-      border-radius: 10px;
-      background: rgba(255,255,255,.10);
-      user-select:none;
-    }
-    .x:hover{background: rgba(255,255,255,.16)}
   </style>
 </head>
 
 <body>
-  <!-- top bar -->
-  <div class="topbar">
-    <div class="topwrap">
-      <div class="glogo" title="這是你自己的網站（外觀像搜尋頁）">
-        <div class="g">
-          <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+  <div class="bg-noise"></div>
+
+  <div class="stage">
+    <div class="wrap">
+
+      <!-- ===== LIST VIEW ===== -->
+      <section id="listView">
+        <div class="topRow">
+          <div class="titleBox">
+            <h1 class="h1">點選帕魯</h1>
+            <p class="sub">搜尋 + 分類 → 點卡片進入介紹；返回會回到原本位置。</p>
+          </div>
+          <button class="btnGhost" id="resetBtn" title="重置篩選">重置篩選</button>
         </div>
-      </div>
 
-      <div class="search" role="search">
-        <input id="q" value="幻獸帕魯帕魯圖鑑" aria-label="搜尋" />
-        <button class="iconBtn" title="清除" onclick="clearQ()">✕</button>
-        <button class="iconBtn" title="搜尋" onclick="doSearch()">🔍</button>
-      </div>
+        <div class="panel">
+          <div class="filters">
+            <input id="searchInput" class="input" placeholder="搜尋：名字 / 屬性 / 定位 / 關鍵字（例如：飛行、坐騎、傳說、Jetragon）" />
 
-      <button class="iconBtn" title="工具">⋮</button>
-    </div>
+            <select id="elementSel" class="select">
+              <option value="">全部屬性</option>
+              <option value="飛行">飛行</option>
+              <option value="火">火</option>
+              <option value="水">水</option>
+              <option value="雷">雷</option>
+              <option value="草">草</option>
+              <option value="暗">暗</option>
+              <option value="龍">龍</option>
+              <option value="冰">冰</option>
+              <option value="地">地</option>
+            </select>
 
-    <div class="tabs">
-      <div class="tab active" onclick="setTab(this)">全部</div>
-      <div class="tab" onclick="setTab(this)">圖片</div>
-      <div class="tab" onclick="setTab(this)">影片</div>
-      <div class="tab" onclick="setTab(this)">購物</div>
-      <div class="tab" onclick="setTab(this)">短片</div>
-      <div class="tab" onclick="setTab(this)">新聞</div>
-      <div class="tab" onclick="setTab(this)">更多</div>
-      <div class="tab" onclick="setTab(this)">工具</div>
-    </div>
-  </div>
+            <select id="roleSel" class="select">
+              <option value="">全部定位</option>
+              <option value="坐騎">坐騎</option>
+              <option value="輸出">輸出</option>
+              <option value="輔助">輔助</option>
+              <option value="工作">工作</option>
+            </select>
 
-  <!-- ===== Search results page ===== -->
-  <div id="resultsView" class="content">
-    <div class="metaLine" id="metaLine">約 4 項結果（0.32 秒）</div>
+            <button class="btnMini" id="densityBtn" title="切換密度">切換密度</button>
+            <button class="btnMini primary" id="paldbBtn" title="開啟 PalDB">PalDB：空渦龍</button>
+            <button class="btnMini" id="googleBtn" title="Google 官方搜尋（CSE）">Google 官方搜尋</button>
+          </div>
 
-    <div class="layout">
-      <div class="results" id="results"></div>
+          <!-- Google CSE (collapsed by default) -->
+          <div class="cseWrap" id="cseWrap">
+            <!-- Google 官方 CSE -->
+            <script async src="https://cse.google.com/cse.js?cx=83fa0f7ab19c7423f"></script>
+            <div class="gcse-search"></div>
 
-      <!-- knowledge panel -->
-      <aside class="kp">
-        <div class="kpTop">
-          <div>
-            <div class="kpTitle" id="kpTitle">空渦龍（Jetragon）</div>
-            <div class="kpType">幻獸帕魯 · 傳說級 · 飛行系</div>
+            <div class="note">
+              這是 Google 官方搜尋引擎（CSE）。結果來自 Google 索引，會依你在 CSE 控制台設定的站點範圍顯示。
+            </div>
+          </div>
+
+          <div class="cards" id="cards"></div>
+        </div>
+      </section>
+
+      <!-- ===== DETAIL VIEW ===== -->
+      <section id="detailView">
+        <div class="topRow">
+          <div class="titleBox">
+            <h1 class="h1" id="detailTitle">空渦龍</h1>
+            <p class="sub" id="detailSub">屬性 / 定位 / 稀有度 / 掉落物 / 坐騎能力</p>
+          </div>
+          <button class="btnGhost" id="backBtn">← 返回帕魯列表</button>
+        </div>
+
+        <div class="detailGrid">
+          <div class="detailLeft">
+            <div class="img">
+              <img id="detailImg" alt="帕魯圖片">
+            </div>
+            <div class="info">
+              <h2 id="detailName">空渦龍（Jetragon）</h2>
+              <p id="detailDesc"></p>
+
+              <div class="chips" style="margin-top:10px;">
+                <span class="chip" id="chipElement"></span>
+                <span class="chip" id="chipRole"></span>
+                <span class="chip" id="chipRarity"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detailRight">
+            <p class="secTitle">🎁 掉落物</p>
+            <ul class="bullets" id="drops"></ul>
+
+            <p class="secTitle">🐾 坐騎能力</p>
+            <div class="bullets" id="mount"></div>
+
+            <div class="actions">
+              <button class="btnMini primary" id="openPaldb">看 PalDB 詳細資料</button>
+              <button class="btnMini" id="openMap">開互動地圖</button>
+              <button class="btnMini" id="openGoogle">用 Google 官方搜尋</button>
+            </div>
+
+            <div class="note">
+              小提醒：有些互動地圖網站可能禁止被嵌入 iframe，所以這裡用「開新分頁」最穩。
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="kpImg" onclick="openLightbox(DATA.jetragon.img,'空渦龍 圖片')">
-          <img id="kpImg" alt="空渦龍">
-        </div>
-
-        <div class="kpLine">
-          <b>屬性：</b><span id="kpElement">飛行</span><br>
-          <b>定位：</b><span id="kpRole">坐騎 / 輸出</span><br>
-          <b>稀有度：</b><span id="kpRarity">傳說</span>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="kpLine" style="color:#3c4043">
-          <b>簡介：</b>速度極快、擅長空中壓制與高速移動，後期超強飛行坐騎。
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="kpLine" style="color:#5f6368">外部資源：</div>
-        <div class="kpLinks">
-          <a href="https://paldb.cc/tw/Jetragon" target="_blank" rel="noopener">PalDB：Jetragon（空渦龍）</a>
-          <a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">Palworld.gg：互動地圖</a>
-        </div>
-      </aside>
-    </div>
-  </div>
-
-  <!-- ===== Detail page ===== -->
-  <div id="detailView">
-    <div class="detailHeader">
-      <div class="metaLine">空渦龍（Jetragon）- 資料頁</div>
-      <div class="backLink" onclick="goBack()">← 返回搜尋結果</div>
-    </div>
-
-    <div class="detailMain">
-      <article class="article">
-        <div class="breadcrumb" style="margin-bottom:6px;">
-          <span class="crumbHost">palpedia.example</span> <span class="crumbPath">› palworld › pals</span>
-        </div>
-
-        <h1 class="h1">空渦龍（Jetragon）</h1>
-        <div class="byline">你的帕魯圖鑑網站 · 單檔 index.html（GitHub Pages）</div>
-
-        <div class="hero" onclick="openLightbox(DATA.jetragon.img,'空渦龍 圖片')">
-          <img id="heroImg" alt="空渦龍">
-        </div>
-
-        <div class="section" id="sec-overview">
-          <h2>概覽</h2>
-          <p id="dDesc"></p>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-            <span class="chip" id="dChip1"></span>
-            <span class="chip" id="dChip2"></span>
-            <span class="chip" id="dChip3"></span>
-          </div>
-        </div>
-
-        <div class="section" id="sec-skills">
-          <h2>技能</h2>
-          <ul id="dSkills"></ul>
-        </div>
-
-        <div class="section" id="sec-work">
-          <h2>工作能力</h2>
-          <ul id="dWork"></ul>
-        </div>
-
-        <div class="section" id="sec-drops">
-          <h2>掉落物</h2>
-          <ul id="dDrops"></ul>
-        </div>
-
-        <div class="section" id="sec-mount">
-          <h2>坐騎能力</h2>
-          <p id="dMount"></p>
-        </div>
-
-        <div class="section" id="sec-links">
-          <h2>外部連結</h2>
-          <ul>
-            <li><a href="https://paldb.cc/tw/Jetragon" target="_blank" rel="noopener">PalDB：空渦龍（Jetragon）</a></li>
-            <li><a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">Palworld.gg：互動地圖</a></li>
-          </ul>
-        </div>
-      </article>
-
-      <aside>
-        <div class="toc">
-          <h3>本頁目錄</h3>
-          <a href="#sec-overview">概覽</a>
-          <a href="#sec-skills">技能</a>
-          <a href="#sec-work">工作能力</a>
-          <a href="#sec-drops">掉落物</a>
-          <a href="#sec-mount">坐騎能力</a>
-          <a href="#sec-links">外部連結</a>
-        </div>
-
-        <div class="mapCard">
-          <div class="mapHead">
-            <b>互動地圖</b>
-            <a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">開啟互動地圖</a>
-          </div>
-          <iframe class="mapFrame"
-            src="https://palworld.gg/zh-Hant/map"
-            loading="lazy"
-            referrerpolicy="no-referrer"></iframe>
-          <div class="note">
-            若地圖空白/被阻擋，代表該網站禁止 iframe 嵌入。<br>
-            直接按上方「開啟互動地圖」即可互動。
-          </div>
-        </div>
-      </aside>
-    </div>
-  </div>
-
-  <!-- lightbox -->
-  <div id="lightbox" onclick="hideLightbox()">
-    <div class="lb" onclick="event.stopPropagation()">
-      <img id="lbImg" alt="放大圖">
-      <div class="lbBar">
-        <div id="lbCap">—</div>
-        <div class="x" onclick="hideLightbox()">關閉 ✕</div>
-      </div>
     </div>
   </div>
 
   <script>
-    // === Data (你之後要多加結果，就往 resultsData 追加即可) ===
-    const DATA = {
-      jetragon: {
-        title: "空渦龍（Jetragon）- 幻獸帕魯帕魯圖鑑",
-        host: "palpedia.example",
-        path: "› palworld › pals › jetragon",
-        snippet: "空渦龍是棲息於高空的傳說級帕魯，速度極快，擅長空中壓制與高速移動，為後期最強飛行坐騎之一。",
-        img: "https://xin.18183.com/uploads/allimg/240122/68-240122143I7.jpg",
+    // ===== Data =====
+    const PALS = [
+      {
+        id: "jetragon",
+        name: "空渦龍",
+        en: "Jetragon",
         element: "飛行",
-        role: "坐騎 / 輸出",
+        role: ["坐騎","輸出"],
         rarity: "傳說",
-        desc: "空渦龍是棲息於高空的傳說級帕魯，速度極快，擅長空中壓制與高速移動，是後期探索與戰鬥都很強力的坐騎型角色。",
-        skills: [
-          "俯衝突擊：高速俯衝造成大量傷害（可自行補更精準技能名/效果）",
-          "空中壓制：在空中保持機動優勢（可自行補更精準效果）"
-        ],
-        work: ["（可填）搬運 / 發電 / 其他工作能力等"],
-        drops: ["（可填）稀有素材、部位掉落等"],
-        mount: "可乘騎飛行，適合長距離探索與高速移動。"
-      }
-    };
-
-    // 模擬「像 Google」那樣多筆結果
-    const resultsData = [
-      {
-        key: "jetragon",
-        host: "paldb.cc",
-        path: "› Pals",
-        title: "Pals - 帕魯編年史Wiki",
-        snippet: "無屬性 火屬性 水屬性 雷屬性 草屬性 暗屬性 龍屬性 地屬性 冰屬性…（示意文字，可換成你想顯示的描述）",
+        keywords: ["飛行","坐騎","傳說","Jetragon","空渦龍"],
         img: "https://xin.18183.com/uploads/allimg/240122/68-240122143I7.jpg",
-        clickable: false,
-        links: [
-          {t:"Palpedia", href:"https://paldb.cc/tw/Jetragon"},
-          {t:"Pals 列表", href:"https://paldb.cc/"}
-        ]
-      },
-      {
-        key: "jetragon",
-        host: "forum.gamer.com.tw",
-        path: "› 哈啦區 › 幻獸帕魯",
-        title: "【心得】小整理：帕魯圖鑑全列表",
-        snippet: "2024年1月19日 — 小整理：帕魯圖鑑全列表；帕魯編年史…（示意文字）",
-        img: "https://i.imgur.com/7yUvePI.png", // 這張如果壞掉就換掉
-        clickable: false,
-        links: [
-          {t:"巴哈討論", href:"https://forum.gamer.com.tw/"},
-        ]
-      },
-      {
-        key: "jetragon",
-        host: "palworld.caimogu.cc",
-        path: "› pal",
-        title: "帕魯圖鑑",
-        snippet: "幻獸帕魯地圖、幻獸帕魯圈子、幻獸帕魯資料站…（示意文字）",
-        img: "https://i.imgur.com/IBaG9dW.png", // 這張如果壞掉就換掉
-        clickable: false,
-        links: [
-          {t:"工具站", href:"https://palworld.gg/zh-Hant/map"},
-        ]
-      },
-      {
-        key: "jetragon",
-        host: "jn99845.github.io",
-        path: "› Palworld-Jetragon-info-page",
-        title: "空渦龍（Jetragon）- 幻獸帕魯帕魯圖鑑（你的網站）",
-        snippet: "空渦龍資料頁：屬性/定位/技能與互動地圖入口。點進去看完整介紹。",
-        img: DATA.jetragon.img,
-        clickable: true, // 這筆點了會進資料頁
-        links: [
-          {t:"資料頁", href:"#"},
-          {t:"PalDB", href:"https://paldb.cc/tw/Jetragon"},
-          {t:"互動地圖", href:"https://palworld.gg/zh-Hant/map"},
-        ]
+        desc: "空渦龍是棲息於高空的傳說級帕魯，速度極快，擅長空中壓制與高速移動，是後期探索與戰鬥都很強力的坐騎型角色。",
+        drops: [
+          "（可填）掉落：高級素材…",
+          "（可填）掉落：稀有部位…"
+        ],
+        mount: "可乘騎飛行，適合長距離探索與高速移動。",
+        paldb: "https://paldb.cc/tw/Jetragon",
+        map: "https://palworld.gg/zh-Hant/map"
       }
     ];
 
+    // ===== State =====
     const $ = (id) => document.getElementById(id);
 
-    function setTab(el){
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      el.classList.add("active");
+    const listView = $("listView");
+    const detailView = $("detailView");
+    const cards = $("cards");
+
+    const searchInput = $("searchInput");
+    const elementSel = $("elementSel");
+    const roleSel = $("roleSel");
+    const resetBtn = $("resetBtn");
+    const densityBtn = $("densityBtn");
+    const paldbBtn = $("paldbBtn");
+    const googleBtn = $("googleBtn");
+    const cseWrap = $("cseWrap");
+
+    let dense = false;
+    let lastScrollY = 0;
+
+    function saveScroll(){
+      lastScrollY = window.scrollY || 0;
+      sessionStorage.setItem("pal_list_scroll", String(lastScrollY));
+    }
+    function restoreScroll(){
+      const v = sessionStorage.getItem("pal_list_scroll");
+      if (v) window.scrollTo(0, Number(v));
     }
 
-    function clearQ(){
-      $("q").value = "";
-      $("q").focus();
+    function setDenseMode(on){
+      dense = on;
+      // Dense mode reduces paddings/height a bit
+      document.querySelectorAll(".card").forEach(c=>{
+        c.style.padding = on ? "10px" : "14px";
+      });
+      document.querySelectorAll(".media").forEach(m=>{
+        m.style.minHeight = on ? "190px" : "220px";
+      });
     }
 
-    function doSearch(){
-      const q = ($("q").value || "").trim();
-      // 這裡先做外觀：不管輸入什麼都顯示結果（之後你要真的搜尋再加）
-      document.title = q ? (q + " - 搜尋") : "搜尋";
-      $("metaLine").textContent = `約 ${resultsData.length} 項結果（0.32 秒）`;
-      renderResults();
+    function matches(pal, q, el, role){
+      const query = (q || "").trim().toLowerCase();
+      const elOk = !el || pal.element === el;
+      const roleOk = !role || pal.role.includes(role);
+
+      if (!query) return elOk && roleOk;
+
+      const hay = [
+        pal.name, pal.en, pal.element, pal.rarity,
+        pal.role.join(" "),
+        pal.keywords.join(" "),
+        pal.desc
+      ].join(" ").toLowerCase();
+
+      return elOk && roleOk && hay.includes(query);
     }
 
-    function renderResults(){
-      const box = $("results");
-      box.innerHTML = "";
+    function render(){
+      cards.innerHTML = "";
+      const q = searchInput.value;
+      const el = elementSel.value;
+      const role = roleSel.value;
 
-      resultsData.forEach((r) => {
-        const row = document.createElement("div");
-        row.className = "resultRow";
+      const list = PALS.filter(p => matches(p, q, el, role));
 
-        const title = document.createElement("div");
-        title.className = "titleLink";
-        title.textContent = r.title;
+      // 你說只要一個空渦龍：但篩選還是保留，之後加多隻直接可用
+      list.forEach(pal => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.onclick = () => openDetail(pal.id);
 
-        if (r.clickable){
-          title.onclick = openDetail;
-        }
-
-        row.innerHTML = `
-          <div class="resultText">
-            <div class="breadcrumb">
-              <span class="crumbHost">${r.host}</span>
-              <span class="crumbPath">${r.path}</span>
+        card.innerHTML = `
+          <div class="media"><img alt="${pal.name}" src="${pal.img}"></div>
+          <div class="meta">
+            <p class="name">${pal.name}</p>
+            <p class="line">${pal.element}・${pal.role.join(" / ")}・${pal.rarity}</p>
+            <div class="chips">
+              <span class="chip">屬性：${pal.element}</span>
+              <span class="chip">定位：${pal.role.join(" / ")}</span>
+              <span class="chip">稀有度：${pal.rarity}</span>
             </div>
           </div>
         `;
 
-        row.querySelector(".resultText").appendChild(title);
-
-        const snippet = document.createElement("div");
-        snippet.className = "snippet";
-        snippet.textContent = r.snippet;
-        row.querySelector(".resultText").appendChild(snippet);
-
-        const links = document.createElement("div");
-        links.className = "sitelinks";
-        (r.links || []).forEach((l) => {
-          const a = document.createElement("a");
-          a.textContent = l.t;
-          a.href = l.href;
-          a.target = "_blank";
-          a.rel = "noopener";
-          if (r.clickable && l.href === "#"){
-            a.href = "javascript:void(0)";
-            a.onclick = openDetail;
-            a.target = "";
-          }
-          links.appendChild(a);
-        });
-        row.querySelector(".resultText").appendChild(links);
-
-        const img = document.createElement("div");
-        img.className = "resultImg";
-        img.innerHTML = `<img alt="" src="${r.img}">`;
-        row.appendChild(img);
-
-        box.appendChild(row);
+        cards.appendChild(card);
       });
+
+      setDenseMode(dense);
     }
 
-    function openDetail(){
-      // 填資料頁
-      $("heroImg").src = DATA.jetragon.img;
-      $("dDesc").textContent = DATA.jetragon.desc;
-      $("dChip1").textContent = "屬性：" + DATA.jetragon.element;
-      $("dChip2").textContent = "定位：" + DATA.jetragon.role;
-      $("dChip3").textContent = "稀有度：" + DATA.jetragon.rarity;
+    function openDetail(id){
+      const pal = PALS.find(p => p.id === id);
+      if (!pal) return;
 
-      fillList("dSkills", DATA.jetragon.skills);
-      fillList("dWork", DATA.jetragon.work);
-      fillList("dDrops", DATA.jetragon.drops);
-      $("dMount").textContent = DATA.jetragon.mount;
+      saveScroll();
 
-      $("resultsView").style.display = "none";
-      $("detailView").style.display = "block";
-      window.scrollTo(0,0);
-    }
+      $("detailTitle").textContent = pal.name;
+      $("detailSub").textContent = `${pal.element} / ${pal.role.join(" / ")} / ${pal.rarity}`;
 
-    function goBack(){
-      $("detailView").style.display = "none";
-      $("resultsView").style.display = "block";
-      window.scrollTo(0,0);
-    }
+      $("detailImg").src = pal.img;
+      $("detailName").textContent = `${pal.name}（${pal.en}）`;
+      $("detailDesc").textContent = pal.desc;
 
-    function fillList(id, arr){
-      const ul = $(id);
-      ul.innerHTML = "";
-      (arr && arr.length ? arr : ["（尚未填寫）"]).forEach((t) => {
+      $("chipElement").textContent = `屬性：${pal.element}`;
+      $("chipRole").textContent = `定位：${pal.role.join(" / ")}`;
+      $("chipRarity").textContent = `稀有度：${pal.rarity}`;
+
+      const dropsEl = $("drops");
+      dropsEl.innerHTML = "";
+      (pal.drops || []).forEach(t=>{
         const li = document.createElement("li");
         li.textContent = t;
-        ul.appendChild(li);
+        dropsEl.appendChild(li);
       });
+
+      $("mount").textContent = pal.mount || "（尚未填寫）";
+
+      // buttons
+      $("openPaldb").onclick = () => window.open(pal.paldb, "_blank", "noopener");
+      $("openMap").onclick = () => window.open(pal.map, "_blank", "noopener");
+
+      // Google official search (CSE) – open new tab google query (optional)
+      $("openGoogle").onclick = () => {
+        const q = encodeURIComponent(`${pal.name} ${pal.en}`);
+        window.open(`https://www.google.com/search?q=${q}`, "_blank", "noopener");
+      };
+
+      // Switch view
+      listView.style.display = "none";
+      detailView.style.display = "block";
+      window.scrollTo(0,0);
     }
 
-    function openLightbox(src, cap){
-      $("lbImg").src = src;
-      $("lbCap").textContent = cap || "圖片";
-      $("lightbox").style.display = "flex";
-    }
-    function hideLightbox(){
-      $("lightbox").style.display = "none";
-      $("lbImg").src = "";
+    function backToList(){
+      detailView.style.display = "none";
+      listView.style.display = "block";
+      // restore scroll position
+      restoreScroll();
     }
 
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && document.activeElement === $("q")) doSearch();
-      if (e.key === "Escape") {
-        if ($("lightbox").style.display === "flex") hideLightbox();
-        else if ($("detailView").style.display === "block") goBack();
+    // ===== Events =====
+    $("backBtn").addEventListener("click", backToList);
+
+    resetBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      elementSel.value = "";
+      roleSel.value = "";
+      render();
+    });
+
+    densityBtn.addEventListener("click", () => {
+      dense = !dense;
+      setDenseMode(dense);
+    });
+
+    paldbBtn.addEventListener("click", () => {
+      const pal = PALS[0];
+      window.open(pal.paldb, "_blank", "noopener");
+    });
+
+    googleBtn.addEventListener("click", () => {
+      const show = cseWrap.style.display !== "block";
+      cseWrap.style.display = show ? "block" : "none";
+      if (show) {
+        // small scroll into view for convenience
+        cseWrap.scrollIntoView({behavior:"smooth", block:"nearest"});
       }
     });
 
-    // init
-    $("kpImg").src = DATA.jetragon.img;
-    renderResults();
+    [searchInput, elementSel, roleSel].forEach(el => {
+      el.addEventListener("input", render);
+      el.addEventListener("change", render);
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        if (detailView.style.display === "block") backToList();
+        else if (cseWrap.style.display === "block") cseWrap.style.display = "none";
+      }
+    });
+
+    // ===== Init =====
+    render();
   </script>
 </body>
 </html>
+
 
