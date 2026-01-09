@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>搜尋：空渦龍（Jetragon）- 幻獸帕魯</title>
+  <title>幻獸帕魯帕魯圖鑑 - 搜尋</title>
 
   <style>
     :root{
@@ -13,12 +13,13 @@
       --border:#e0e0e0;
       --blue:#1a0dab;
       --blue2:#1a73e8;
-      --green:#188038;
       --chip:#f1f3f4;
-      --card:#ffffff;
       --shadow: 0 1px 2px rgba(60,64,67,.15), 0 1px 3px 1px rgba(60,64,67,.1);
       --radius: 12px;
       --max: 1100px;
+      --tab:#3c4043;
+      --tabMuted:#70757a;
+      --tabLine:#dadce0;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -30,29 +31,42 @@
     }
     a{color:var(--blue2); text-decoration:none}
     a:hover{text-decoration:underline}
+
+    /* ===== top ===== */
     .topbar{
       position: sticky;
       top:0;
-      z-index: 10;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
+      z-index: 50;
+      background:#fff;
+      border-bottom: 1px solid var(--tabLine);
     }
     .topwrap{
       max-width: var(--max);
       margin: 0 auto;
-      padding: 10px 14px;
+      padding: 14px 14px 6px;
       display:flex;
       align-items:center;
-      gap: 12px;
+      gap: 14px;
     }
-    .logo{
-      font-weight: 800;
-      letter-spacing: .2px;
-      color: #5f6368;
+    .glogo{
+      display:flex;
+      align-items:center;
+      gap:8px;
       user-select:none;
       white-space:nowrap;
     }
-    .logo b{color:#4285f4}
+    .glogo .g{
+      font-weight:800;
+      font-size: 22px;
+      letter-spacing:.2px;
+    }
+    .glogo .g span:nth-child(1){color:#4285f4}
+    .glogo .g span:nth-child(2){color:#ea4335}
+    .glogo .g span:nth-child(3){color:#fbbc05}
+    .glogo .g span:nth-child(4){color:#4285f4}
+    .glogo .g span:nth-child(5){color:#34a853}
+    .glogo .g span:nth-child(6){color:#ea4335}
+    .glogo .sub{color:#9aa0a6; font-size:12px}
     .search{
       flex:1;
       display:flex;
@@ -62,130 +76,185 @@
       border-radius: 999px;
       padding: 10px 14px;
       box-shadow: 0 1px 2px rgba(0,0,0,.06);
-      min-width: 180px;
+      min-width: 220px;
     }
     .search input{
       border:0;
       outline:none;
       width:100%;
-      font-size: 15px;
+      font-size: 16px;
       color: var(--text);
     }
-    .btn{
-      border: 1px solid var(--border);
-      background: #fff;
-      border-radius: 10px;
-      padding: 8px 10px;
+    .iconBtn{
+      border:0;
+      background:transparent;
       cursor:pointer;
-      color: var(--text);
-      white-space:nowrap;
+      color:#5f6368;
+      font-size:14px;
+      padding:6px 8px;
+      border-radius:999px;
     }
-    .btn:hover{background:#f8f9fa}
+    .iconBtn:hover{background:#f1f3f4}
+
+    .tabs{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 14px;
+      display:flex;
+      gap: 18px;
+      align-items:flex-end;
+      border-bottom: 1px solid var(--tabLine);
+    }
+    .tab{
+      padding: 10px 2px 12px;
+      font-size: 13px;
+      color: var(--tabMuted);
+      cursor:pointer;
+      user-select:none;
+      border-bottom: 3px solid transparent;
+    }
+    .tab.active{
+      color: var(--tab);
+      border-bottom-color: var(--blue2);
+      font-weight: 700;
+    }
+
+    /* ===== content ===== */
     .content{
       max-width: var(--max);
       margin: 0 auto;
-      padding: 16px 14px 60px;
+      padding: 12px 14px 60px;
     }
-
-    /* ===== Search results ===== */
-    #resultsView{display:block}
     .metaLine{
       color: var(--muted);
       font-size: 13px;
-      margin: 10px 0 14px;
+      margin: 10px 0 12px;
     }
     .layout{
       display:grid;
-      grid-template-columns: 1fr 340px;
-      gap: 18px;
+      grid-template-columns: 1fr 360px;
+      gap: 22px;
       align-items:start;
     }
     @media (max-width: 980px){
       .layout{grid-template-columns: 1fr}
     }
-    .result{
-      margin: 0 0 18px;
+
+    /* ===== results list ===== */
+    .results{max-width: 680px;}
+    .resultRow{
+      display:flex;
+      gap:14px;
+      justify-content:space-between;
+      padding: 8px 0 14px;
     }
+    .resultRow + .resultRow{ margin-top: 8px; }
+    .resultText{flex:1; min-width: 0;}
     .breadcrumb{
-      color: var(--green);
-      font-size: 13px;
-      margin-bottom: 3px;
-      word-break: break-all;
+      color: #202124;
+      font-size: 12px;
+      margin-bottom: 4px;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      flex-wrap:wrap;
     }
+    .crumbHost{color:#202124}
+    .crumbPath{color:#5f6368}
     .titleLink{
       display:inline-block;
       font-size: 20px;
       color: var(--blue);
       line-height: 1.3;
-      margin-bottom: 3px;
+      margin-bottom: 5px;
+      cursor:pointer;
     }
     .snippet{
       color: var(--muted);
       font-size: 14px;
       line-height: 1.6;
     }
-    .chips{
+    .sitelinks{
+      margin-top: 8px;
       display:flex;
       flex-wrap:wrap;
-      gap:8px;
-      margin-top: 10px;
+      gap: 14px;
+      font-size: 13px;
     }
-    .chip{
-      background: var(--chip);
-      color: #3c4043;
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid #e6e6e6;
+    .sitelinks a{color: var(--blue2)}
+    .resultImg{
+      width: 92px;
+      height: 92px;
+      border-radius: 10px;
+      overflow:hidden;
+      border: 1px solid var(--border);
+      background: #f1f3f4;
+      flex: 0 0 auto;
+      align-self:flex-start;
+    }
+    .resultImg img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
 
-    /* Knowledge panel */
+    /* ===== knowledge panel ===== */
     .kp{
-      background: var(--card);
+      background: #fff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 14px;
     }
-    .kp h3{
-      margin:0 0 8px;
-      font-size: 18px;
+    .kpTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 10px;
+    }
+    .kpTitle{
+      font-size: 20px;
+      font-weight: 700;
+      margin:0;
+    }
+    .kpType{
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
     }
     .kpImg{
       width:100%;
       aspect-ratio: 16/9;
       border-radius: 10px;
       overflow:hidden;
-      border:1px solid var(--border);
-      background:#f8f9fa;
-      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      background:#f1f3f4;
+      margin: 10px 0;
       cursor:pointer;
     }
     .kpImg img{width:100%; height:100%; object-fit:cover; display:block}
     .kpLine{
       font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 10px;
+      color: #3c4043;
+      line-height: 1.7;
     }
-    .kpLinks{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      margin-top:10px;
-    }
+    .kpLine b{color:#202124}
+    .divider{height:1px;background:var(--border); margin: 10px 0}
+    .kpLinks{display:flex; flex-direction:column; gap:8px; margin-top:10px;}
     .kpLinks a{font-size: 14px}
-    .divider{height:1px;background:var(--border); margin: 12px 0}
 
-    /* ===== Detail page ===== */
+    /* ===== detail page ===== */
     #detailView{display:none}
-    .detailTop{
+    .detailHeader{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 12px 14px;
       display:flex;
-      align-items:flex-start;
       justify-content:space-between;
-      gap: 12px;
-      flex-wrap:wrap;
-      margin-top: 6px;
+      align-items:center;
+      gap: 10px;
     }
     .backLink{
       color: var(--blue2);
@@ -195,70 +264,52 @@
       white-space:nowrap;
     }
     .backLink:hover{text-decoration:underline}
-    .doc{
+    .detailMain{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 14px 60px;
       display:grid;
       grid-template-columns: 1fr 360px;
-      gap: 18px;
-      align-items:start;
-      margin-top: 10px;
+      gap: 22px;
     }
     @media (max-width: 980px){
-      .doc{grid-template-columns:1fr}
+      .detailMain{grid-template-columns:1fr}
     }
     .article{
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px;
       box-shadow: var(--shadow);
       background:#fff;
+      padding: 16px;
     }
-    .h1{
-      font-size: 30px;
-      line-height: 1.2;
-      margin: 0 0 8px;
-      font-weight: 700;
-    }
-    .byline{
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
+    .h1{margin: 0 0 8px; font-size: 30px; line-height:1.2;}
+    .byline{color: var(--muted); font-size: 13px; margin-bottom: 12px;}
     .hero{
       width:100%;
       aspect-ratio: 16/9;
       border-radius: 12px;
       overflow:hidden;
       border: 1px solid var(--border);
-      background:#f8f9fa;
+      background:#f1f3f4;
       margin: 10px 0 14px;
       cursor:pointer;
     }
     .hero img{width:100%; height:100%; object-fit:cover; display:block}
-
     .section{margin-top: 16px}
-    .section h2{
-      font-size: 18px;
-      margin: 0 0 8px;
-    }
-    .section p, .section li{
-      font-size: 14px;
-      line-height: 1.8;
-      color: #3c4043;
-    }
-    .section ul{margin: 8px 0 0; padding-left: 18px}
+    .section h2{font-size: 18px; margin: 0 0 8px;}
+    .section p, .section li{font-size: 14px; line-height: 1.85; color:#3c4043;}
+    .section ul{margin: 8px 0 0; padding-left: 18px;}
 
     .toc{
       border:1px solid var(--border);
       border-radius: var(--radius);
-      padding: 12px;
-      background:#fff;
       box-shadow: var(--shadow);
+      background:#fff;
+      padding: 12px;
       position: sticky;
-      top: 74px;
+      top: 92px;
     }
-    @media (max-width: 980px){
-      .toc{position:static}
-    }
+    @media (max-width: 980px){ .toc{position:static} }
     .toc h3{margin:0 0 10px; font-size: 14px}
     .toc a{display:block; padding: 6px 0; font-size: 13px; color: var(--blue2)}
     .toc a:hover{text-decoration:underline}
@@ -277,7 +328,7 @@
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:10px;
+      gap: 10px;
       flex-wrap:wrap;
     }
     .mapHead b{font-size: 14px}
@@ -287,7 +338,7 @@
       height: 520px;
       border:0;
       display:block;
-      background:#f8f9fa;
+      background:#f1f3f4;
     }
     .note{
       padding: 10px 12px;
@@ -297,7 +348,7 @@
       line-height: 1.6;
     }
 
-    /* Lightbox */
+    /* ===== lightbox ===== */
     #lightbox{
       position: fixed;
       inset:0;
@@ -343,155 +394,168 @@
 </head>
 
 <body>
-  <!-- Top search bar (like Google) -->
+  <!-- top bar -->
   <div class="topbar">
     <div class="topwrap">
-      <div class="logo"><b>G</b>oogle-ish</div>
-      <div class="search" role="search">
-        <input id="q" value="空渦龍 Jetragon" aria-label="搜尋" />
+      <div class="glogo" title="這是你自己的網站（外觀像搜尋頁）">
+        <div class="g">
+          <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+        </div>
       </div>
-      <button class="btn" onclick="doSearch()">搜尋</button>
+
+      <div class="search" role="search">
+        <input id="q" value="幻獸帕魯帕魯圖鑑" aria-label="搜尋" />
+        <button class="iconBtn" title="清除" onclick="clearQ()">✕</button>
+        <button class="iconBtn" title="搜尋" onclick="doSearch()">🔍</button>
+      </div>
+
+      <button class="iconBtn" title="工具">⋮</button>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="setTab(this)">全部</div>
+      <div class="tab" onclick="setTab(this)">圖片</div>
+      <div class="tab" onclick="setTab(this)">影片</div>
+      <div class="tab" onclick="setTab(this)">購物</div>
+      <div class="tab" onclick="setTab(this)">短片</div>
+      <div class="tab" onclick="setTab(this)">新聞</div>
+      <div class="tab" onclick="setTab(this)">更多</div>
+      <div class="tab" onclick="setTab(this)">工具</div>
     </div>
   </div>
 
-  <div class="content">
+  <!-- ===== Search results page ===== -->
+  <div id="resultsView" class="content">
+    <div class="metaLine" id="metaLine">約 4 項結果（0.32 秒）</div>
 
-    <!-- ===== Search results view ===== -->
-    <section id="resultsView">
-      <div class="metaLine" id="metaLine">約 1 項結果（0.32 秒）</div>
+    <div class="layout">
+      <div class="results" id="results"></div>
 
-      <div class="layout">
-        <div>
-          <div class="result">
-            <div class="breadcrumb">palpedia.example › palworld › pals › jetragon</div>
-            <a class="titleLink" href="javascript:void(0)" onclick="openDetail()" aria-label="空渦龍（Jetragon）- 資料頁">
-              空渦龍（Jetragon）- 幻獸帕魯帕魯圖鑑
-            </a>
-            <div class="snippet">
-              空渦龍是棲息於高空的傳說級帕魯，速度極快，擅長空中壓制與高速移動。
-              提供屬性/定位/技能、地圖入口與外部資料（PalDB、互動地圖）…
-            </div>
-            <div class="chips">
-              <span class="chip">屬性：飛行</span>
-              <span class="chip">定位：坐騎 / 輸出</span>
-              <span class="chip">稀有度：傳說</span>
-              <span class="chip">關鍵字：Jetragon</span>
-            </div>
+      <!-- knowledge panel -->
+      <aside class="kp">
+        <div class="kpTop">
+          <div>
+            <div class="kpTitle" id="kpTitle">空渦龍（Jetragon）</div>
+            <div class="kpType">幻獸帕魯 · 傳說級 · 飛行系</div>
           </div>
         </div>
 
-        <!-- Knowledge panel -->
-        <aside class="kp">
-          <h3>空渦龍（Jetragon）</h3>
-          <div class="kpImg" onclick="openLightbox(DATA.img,'空渦龍 圖片')">
-            <img id="kpImg" alt="空渦龍" />
-          </div>
-          <div class="kpLine">
-            <b>屬性：</b>飛行<br>
-            <b>定位：</b>坐騎 / 輸出<br>
-            <b>稀有度：</b>傳說
-          </div>
-          <div class="divider"></div>
-          <div class="kpLine">
-            外部資源：
-          </div>
-          <div class="kpLinks">
-            <a href="https://paldb.cc/tw/Jetragon" target="_blank" rel="noopener">PalDB：Jetragon（空渦龍）</a>
-            <a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">Palworld.gg：互動地圖</a>
-          </div>
-        </aside>
-      </div>
-    </section>
+        <div class="kpImg" onclick="openLightbox(DATA.jetragon.img,'空渦龍 圖片')">
+          <img id="kpImg" alt="空渦龍">
+        </div>
 
-    <!-- ===== Detail view ===== -->
-    <section id="detailView">
-      <div class="detailTop">
-        <div class="metaLine">結果 1：空渦龍（Jetragon）</div>
-        <div class="backLink" onclick="goBack()">← 返回搜尋結果</div>
-      </div>
+        <div class="kpLine">
+          <b>屬性：</b><span id="kpElement">飛行</span><br>
+          <b>定位：</b><span id="kpRole">坐騎 / 輸出</span><br>
+          <b>稀有度：</b><span id="kpRarity">傳說</span>
+        </div>
 
-      <div class="doc">
-        <!-- Article -->
-        <article class="article">
-          <div class="breadcrumb" style="margin-bottom:6px;">palpedia.example › palworld › pals</div>
-          <h1 class="h1">空渦龍（Jetragon）</h1>
-          <div class="byline">幻獸帕魯資料頁 · 本頁為你的單檔網站（index.html）展示</div>
+        <div class="divider"></div>
 
-          <div class="hero" onclick="openLightbox(DATA.img,'空渦龍 圖片')">
-            <img id="heroImg" alt="空渦龍" />
-          </div>
+        <div class="kpLine" style="color:#3c4043">
+          <b>簡介：</b>速度極快、擅長空中壓制與高速移動，後期超強飛行坐騎。
+        </div>
 
-          <div class="section" id="sec-overview">
-            <h2>概覽</h2>
-            <p id="desc"></p>
-            <div class="chips">
-              <span class="chip" id="chipElement"></span>
-              <span class="chip" id="chipRole"></span>
-              <span class="chip" id="chipRarity"></span>
-            </div>
-          </div>
+        <div class="divider"></div>
 
-          <div class="section" id="sec-skills">
-            <h2>技能</h2>
-            <ul id="skills"></ul>
-          </div>
-
-          <div class="section" id="sec-work">
-            <h2>工作能力</h2>
-            <ul id="work"></ul>
-          </div>
-
-          <div class="section" id="sec-drops">
-            <h2>掉落物</h2>
-            <ul id="drops"></ul>
-          </div>
-
-          <div class="section" id="sec-mount">
-            <h2>坐騎能力</h2>
-            <p id="mount"></p>
-          </div>
-
-          <div class="section" id="sec-links">
-            <h2>外部連結</h2>
-            <ul>
-              <li><a href="https://paldb.cc/tw/Jetragon" target="_blank" rel="noopener">PalDB：空渦龍（Jetragon）</a></li>
-              <li><a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">Palworld.gg：互動地圖</a></li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- Right: TOC + Map -->
-        <aside>
-          <div class="toc">
-            <h3>本頁目錄</h3>
-            <a href="#sec-overview">概覽</a>
-            <a href="#sec-skills">技能</a>
-            <a href="#sec-work">工作能力</a>
-            <a href="#sec-drops">掉落物</a>
-            <a href="#sec-mount">坐騎能力</a>
-            <a href="#sec-links">外部連結</a>
-          </div>
-
-          <div class="mapCard">
-            <div class="mapHead">
-              <b>互動地圖</b>
-              <a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">開啟互動地圖</a>
-            </div>
-            <iframe class="mapFrame"
-              src="https://palworld.gg/zh-Hant/map"
-              loading="lazy"
-              referrerpolicy="no-referrer"></iframe>
-            <div class="note">
-              如果上面顯示空白/被阻擋，代表該網站禁止 iframe 嵌入。<br>
-              直接按「開啟互動地圖」即可正常互動。
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
+        <div class="kpLine" style="color:#5f6368">外部資源：</div>
+        <div class="kpLinks">
+          <a href="https://paldb.cc/tw/Jetragon" target="_blank" rel="noopener">PalDB：Jetragon（空渦龍）</a>
+          <a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">Palworld.gg：互動地圖</a>
+        </div>
+      </aside>
+    </div>
   </div>
 
-  <!-- Lightbox -->
+  <!-- ===== Detail page ===== -->
+  <div id="detailView">
+    <div class="detailHeader">
+      <div class="metaLine">空渦龍（Jetragon）- 資料頁</div>
+      <div class="backLink" onclick="goBack()">← 返回搜尋結果</div>
+    </div>
+
+    <div class="detailMain">
+      <article class="article">
+        <div class="breadcrumb" style="margin-bottom:6px;">
+          <span class="crumbHost">palpedia.example</span> <span class="crumbPath">› palworld › pals</span>
+        </div>
+
+        <h1 class="h1">空渦龍（Jetragon）</h1>
+        <div class="byline">你的帕魯圖鑑網站 · 單檔 index.html（GitHub Pages）</div>
+
+        <div class="hero" onclick="openLightbox(DATA.jetragon.img,'空渦龍 圖片')">
+          <img id="heroImg" alt="空渦龍">
+        </div>
+
+        <div class="section" id="sec-overview">
+          <h2>概覽</h2>
+          <p id="dDesc"></p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+            <span class="chip" id="dChip1"></span>
+            <span class="chip" id="dChip2"></span>
+            <span class="chip" id="dChip3"></span>
+          </div>
+        </div>
+
+        <div class="section" id="sec-skills">
+          <h2>技能</h2>
+          <ul id="dSkills"></ul>
+        </div>
+
+        <div class="section" id="sec-work">
+          <h2>工作能力</h2>
+          <ul id="dWork"></ul>
+        </div>
+
+        <div class="section" id="sec-drops">
+          <h2>掉落物</h2>
+          <ul id="dDrops"></ul>
+        </div>
+
+        <div class="section" id="sec-mount">
+          <h2>坐騎能力</h2>
+          <p id="dMount"></p>
+        </div>
+
+        <div class="section" id="sec-links">
+          <h2>外部連結</h2>
+          <ul>
+            <li><a href="https://paldb.cc/tw/Jetragon" target="_blank" rel="noopener">PalDB：空渦龍（Jetragon）</a></li>
+            <li><a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">Palworld.gg：互動地圖</a></li>
+          </ul>
+        </div>
+      </article>
+
+      <aside>
+        <div class="toc">
+          <h3>本頁目錄</h3>
+          <a href="#sec-overview">概覽</a>
+          <a href="#sec-skills">技能</a>
+          <a href="#sec-work">工作能力</a>
+          <a href="#sec-drops">掉落物</a>
+          <a href="#sec-mount">坐騎能力</a>
+          <a href="#sec-links">外部連結</a>
+        </div>
+
+        <div class="mapCard">
+          <div class="mapHead">
+            <b>互動地圖</b>
+            <a href="https://palworld.gg/zh-Hant/map" target="_blank" rel="noopener">開啟互動地圖</a>
+          </div>
+          <iframe class="mapFrame"
+            src="https://palworld.gg/zh-Hant/map"
+            loading="lazy"
+            referrerpolicy="no-referrer"></iframe>
+          <div class="note">
+            若地圖空白/被阻擋，代表該網站禁止 iframe 嵌入。<br>
+            直接按上方「開啟互動地圖」即可互動。
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- lightbox -->
   <div id="lightbox" onclick="hideLightbox()">
     <div class="lb" onclick="event.stopPropagation()">
       <img id="lbImg" alt="放大圖">
@@ -502,94 +566,218 @@
     </div>
   </div>
 
-<script>
-  // ===== Data (only Jetragon) =====
-  const DATA = {
-    queryDefault: "空渦龍 Jetragon",
-    name: "空渦龍（Jetragon）",
-    element: "飛行",
-    role: "坐騎 / 輸出",
-    rarity: "傳說",
-    img: "https://xin.18183.com/uploads/allimg/240122/68-240122143I7.jpg",
-    desc: "空渦龍是棲息於高空的傳說級帕魯，速度極快，擅長空中壓制與高速移動，是後期探索與戰鬥都很強力的坐騎型角色。",
-    skills: [
-      "俯衝突擊：高速俯衝造成大量傷害（可自行補更精準技能名/效果）",
-      "空中壓制：在空中保持機動優勢（可自行補更精準效果）"
-    ],
-    work: [
-      "（可填）搬運 / 發電 / 其他工作能力等"
-    ],
-    drops: [
-      "（可填）掉落物：稀有素材、部位掉落等"
-    ],
-    mount: "可乘騎飛行，適合長距離探索與高速移動。"
-  };
+  <script>
+    // === Data (你之後要多加結果，就往 resultsData 追加即可) ===
+    const DATA = {
+      jetragon: {
+        title: "空渦龍（Jetragon）- 幻獸帕魯帕魯圖鑑",
+        host: "palpedia.example",
+        path: "› palworld › pals › jetragon",
+        snippet: "空渦龍是棲息於高空的傳說級帕魯，速度極快，擅長空中壓制與高速移動，為後期最強飛行坐騎之一。",
+        img: "https://xin.18183.com/uploads/allimg/240122/68-240122143I7.jpg",
+        element: "飛行",
+        role: "坐騎 / 輸出",
+        rarity: "傳說",
+        desc: "空渦龍是棲息於高空的傳說級帕魯，速度極快，擅長空中壓制與高速移動，是後期探索與戰鬥都很強力的坐騎型角色。",
+        skills: [
+          "俯衝突擊：高速俯衝造成大量傷害（可自行補更精準技能名/效果）",
+          "空中壓制：在空中保持機動優勢（可自行補更精準效果）"
+        ],
+        work: ["（可填）搬運 / 發電 / 其他工作能力等"],
+        drops: ["（可填）稀有素材、部位掉落等"],
+        mount: "可乘騎飛行，適合長距離探索與高速移動。"
+      }
+    };
 
-  // ===== Elements =====
-  const $ = (id) => document.getElementById(id);
+    // 模擬「像 Google」那樣多筆結果
+    const resultsData = [
+      {
+        key: "jetragon",
+        host: "paldb.cc",
+        path: "› Pals",
+        title: "Pals - 帕魯編年史Wiki",
+        snippet: "無屬性 火屬性 水屬性 雷屬性 草屬性 暗屬性 龍屬性 地屬性 冰屬性…（示意文字，可換成你想顯示的描述）",
+        img: "https://xin.18183.com/uploads/allimg/240122/68-240122143I7.jpg",
+        clickable: false,
+        links: [
+          {t:"Palpedia", href:"https://paldb.cc/tw/Jetragon"},
+          {t:"Pals 列表", href:"https://paldb.cc/"}
+        ]
+      },
+      {
+        key: "jetragon",
+        host: "forum.gamer.com.tw",
+        path: "› 哈啦區 › 幻獸帕魯",
+        title: "【心得】小整理：帕魯圖鑑全列表",
+        snippet: "2024年1月19日 — 小整理：帕魯圖鑑全列表；帕魯編年史…（示意文字）",
+        img: "https://i.imgur.com/7yUvePI.png", // 這張如果壞掉就換掉
+        clickable: false,
+        links: [
+          {t:"巴哈討論", href:"https://forum.gamer.com.tw/"},
+        ]
+      },
+      {
+        key: "jetragon",
+        host: "palworld.caimogu.cc",
+        path: "› pal",
+        title: "帕魯圖鑑",
+        snippet: "幻獸帕魯地圖、幻獸帕魯圈子、幻獸帕魯資料站…（示意文字）",
+        img: "https://i.imgur.com/IBaG9dW.png", // 這張如果壞掉就換掉
+        clickable: false,
+        links: [
+          {t:"工具站", href:"https://palworld.gg/zh-Hant/map"},
+        ]
+      },
+      {
+        key: "jetragon",
+        host: "jn99845.github.io",
+        path: "› Palworld-Jetragon-info-page",
+        title: "空渦龍（Jetragon）- 幻獸帕魯帕魯圖鑑（你的網站）",
+        snippet: "空渦龍資料頁：屬性/定位/技能與互動地圖入口。點進去看完整介紹。",
+        img: DATA.jetragon.img,
+        clickable: true, // 這筆點了會進資料頁
+        links: [
+          {t:"資料頁", href:"#"},
+          {t:"PalDB", href:"https://paldb.cc/tw/Jetragon"},
+          {t:"互動地圖", href:"https://palworld.gg/zh-Hant/map"},
+        ]
+      }
+    ];
 
-  // Init images
-  $("kpImg").src = DATA.img;
-  $("heroImg").src = DATA.img;
-  $("desc").textContent = DATA.desc;
-  $("chipElement").textContent = "屬性：" + DATA.element;
-  $("chipRole").textContent = "定位：" + DATA.role;
-  $("chipRarity").textContent = "稀有度：" + DATA.rarity;
+    const $ = (id) => document.getElementById(id);
 
-  function fillList(id, arr){
-    const ul = $(id);
-    ul.innerHTML = "";
-    (arr || []).forEach(t => {
-      const li = document.createElement("li");
-      li.textContent = t;
-      ul.appendChild(li);
+    function setTab(el){
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      el.classList.add("active");
+    }
+
+    function clearQ(){
+      $("q").value = "";
+      $("q").focus();
+    }
+
+    function doSearch(){
+      const q = ($("q").value || "").trim();
+      // 這裡先做外觀：不管輸入什麼都顯示結果（之後你要真的搜尋再加）
+      document.title = q ? (q + " - 搜尋") : "搜尋";
+      $("metaLine").textContent = `約 ${resultsData.length} 項結果（0.32 秒）`;
+      renderResults();
+    }
+
+    function renderResults(){
+      const box = $("results");
+      box.innerHTML = "";
+
+      resultsData.forEach((r) => {
+        const row = document.createElement("div");
+        row.className = "resultRow";
+
+        const title = document.createElement("div");
+        title.className = "titleLink";
+        title.textContent = r.title;
+
+        if (r.clickable){
+          title.onclick = openDetail;
+        }
+
+        row.innerHTML = `
+          <div class="resultText">
+            <div class="breadcrumb">
+              <span class="crumbHost">${r.host}</span>
+              <span class="crumbPath">${r.path}</span>
+            </div>
+          </div>
+        `;
+
+        row.querySelector(".resultText").appendChild(title);
+
+        const snippet = document.createElement("div");
+        snippet.className = "snippet";
+        snippet.textContent = r.snippet;
+        row.querySelector(".resultText").appendChild(snippet);
+
+        const links = document.createElement("div");
+        links.className = "sitelinks";
+        (r.links || []).forEach((l) => {
+          const a = document.createElement("a");
+          a.textContent = l.t;
+          a.href = l.href;
+          a.target = "_blank";
+          a.rel = "noopener";
+          if (r.clickable && l.href === "#"){
+            a.href = "javascript:void(0)";
+            a.onclick = openDetail;
+            a.target = "";
+          }
+          links.appendChild(a);
+        });
+        row.querySelector(".resultText").appendChild(links);
+
+        const img = document.createElement("div");
+        img.className = "resultImg";
+        img.innerHTML = `<img alt="" src="${r.img}">`;
+        row.appendChild(img);
+
+        box.appendChild(row);
+      });
+    }
+
+    function openDetail(){
+      // 填資料頁
+      $("heroImg").src = DATA.jetragon.img;
+      $("dDesc").textContent = DATA.jetragon.desc;
+      $("dChip1").textContent = "屬性：" + DATA.jetragon.element;
+      $("dChip2").textContent = "定位：" + DATA.jetragon.role;
+      $("dChip3").textContent = "稀有度：" + DATA.jetragon.rarity;
+
+      fillList("dSkills", DATA.jetragon.skills);
+      fillList("dWork", DATA.jetragon.work);
+      fillList("dDrops", DATA.jetragon.drops);
+      $("dMount").textContent = DATA.jetragon.mount;
+
+      $("resultsView").style.display = "none";
+      $("detailView").style.display = "block";
+      window.scrollTo(0,0);
+    }
+
+    function goBack(){
+      $("detailView").style.display = "none";
+      $("resultsView").style.display = "block";
+      window.scrollTo(0,0);
+    }
+
+    function fillList(id, arr){
+      const ul = $(id);
+      ul.innerHTML = "";
+      (arr && arr.length ? arr : ["（尚未填寫）"]).forEach((t) => {
+        const li = document.createElement("li");
+        li.textContent = t;
+        ul.appendChild(li);
+      });
+    }
+
+    function openLightbox(src, cap){
+      $("lbImg").src = src;
+      $("lbCap").textContent = cap || "圖片";
+      $("lightbox").style.display = "flex";
+    }
+    function hideLightbox(){
+      $("lightbox").style.display = "none";
+      $("lbImg").src = "";
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && document.activeElement === $("q")) doSearch();
+      if (e.key === "Escape") {
+        if ($("lightbox").style.display === "flex") hideLightbox();
+        else if ($("detailView").style.display === "block") goBack();
+      }
     });
-  }
-  fillList("skills", DATA.skills);
-  fillList("work", DATA.work);
-  fillList("drops", DATA.drops);
-  $("mount").textContent = DATA.mount;
 
-  // Search behavior
-  function doSearch(){
-    // 目前只有 1 筆資料：你輸入什麼都顯示 1 筆（可之後擴充多帕魯）
-    const q = ($("q").value || "").trim();
-    document.title = q ? ("搜尋：" + q + " - 幻獸帕魯") : ("搜尋：" + DATA.queryDefault);
-    $("metaLine").textContent = "約 1 項結果（0.32 秒）";
-    // stay on results
-    showResults();
-  }
-
-  // Navigation
-  function openDetail(){
-    // 模擬「點進資料頁」
-    $("resultsView").style.display = "none";
-    $("detailView").style.display = "block";
-    window.scrollTo(0,0);
-  }
-  function goBack(){
-    showResults();
-    window.scrollTo(0,0);
-  }
-  function showResults(){
-    $("detailView").style.display = "none";
-    $("resultsView").style.display = "block";
-  }
-
-  // Lightbox
-  function openLightbox(src, cap){
-    $("lbImg").src = src;
-    $("lbCap").textContent = cap || "圖片";
-    $("lightbox").style.display = "flex";
-  }
-  function hideLightbox(){
-    $("lightbox").style.display = "none";
-    $("lbImg").src = "";
-  }
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && document.activeElement === $("q")) doSearch();
-    if (e.key === "Escape") hideLightbox();
-  });
-</script>
+    // init
+    $("kpImg").src = DATA.jetragon.img;
+    renderResults();
+  </script>
 </body>
 </html>
+
